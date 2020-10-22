@@ -6,9 +6,9 @@ import {
   Label,
   Button
 } from "reactstrap"
-export default () => {
+export default ({data, setData}) => {
   const [country, setCountry] = useState('')
-  const [data, setData] = useState({})
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
