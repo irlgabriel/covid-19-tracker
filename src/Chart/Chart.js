@@ -3,11 +3,11 @@ import { PieChart, Pie, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, 
 import { Container } from "reactstrap"
 export default ({data}) => {
   const [dataSet, setData] = useState([])
-
+  /*
   useEffect(() => {
-    data.country && setData([{...data['provinces'][0], date: Date()}])
+    data.country && setData([{...data['provinces'][0], date: new Date().toISOString().split('T')[0]}])
   }, [data])
-
+  */
   /*
   useEffect(() => {
     dataSet.active && (
@@ -17,7 +17,8 @@ export default ({data}) => {
   */
   return(
     <Container fluid className="d-flex justify-content-center">
-      <BarChart width={730} height={250} data={dataSet}>
+
+      <BarChart width={800} height={250} data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />
         <YAxis />
@@ -26,7 +27,8 @@ export default ({data}) => {
         <Bar dataKey="active" fill="grey" />
         <Bar dataKey="confirmed" fill="#8884d8" />
         <Bar dataKey="recovered" fill="#82ca9d" />
-        <Bar dataKey="deaths" fill="rgba(255,0,0,0.6)" />
+        <Bar dataKey="deaths" fill="rgba(0,0,0,1)" />
+        <Bar dataKey="critical" fill="red" />
       </BarChart>
     </Container>
   )

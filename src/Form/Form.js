@@ -21,7 +21,7 @@ export default ({data, setData}) => {
     })
     .then(response => {
       response.json()
-      .then(res => setData(res[0]))
+      .then(res => setData( [{...res[0]['provinces'][0], date: new Date().toISOString().split('T')[0]}] ))
     })
     .catch(err => {
       console.error(err);
