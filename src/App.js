@@ -11,8 +11,8 @@ function App() {
   const [worldData, setWorldData] = useState({})
 
   useEffect(() => {
-    // Get WORLD Data
-    fetch("https://rapidapi.p.rapidapi.com/report/totals?date=2020-07-21", {
+    // GET World Data for today
+    fetch("https://rapidapi.p.rapidapi.com/totals", {
       "method": "GET",
       "headers": {
         "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
@@ -21,7 +21,9 @@ function App() {
     })
     .then(response => {
       response.json()
-        .then(res => setWorldData(res))
+        .then(res => 
+          setWorldData(res)
+        )
     })
     .catch(err => {
       console.error(err);
@@ -37,7 +39,7 @@ function App() {
       <span>Covid-19 Tracker</span>
       </h2>
       <CountryForm data={countryData} setData={setCountryData} />
-      {worldData.length && <Chart data={worldData} />}
+      {worldData.length && <Chart data={worldData} title="Worldwide"/>}
       {countryData.length && <Chart data={countryData} />}
     </Container>
   );

@@ -12,7 +12,7 @@ export default ({data, setData}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`https://rapidapi.p.rapidapi.com/report/country/name?date=2020-04-01&name=${country}`, {
+    fetch('https://rapidapi.p.rapidapi.com/report/country/name?date=2020-04-01&name=Italy', {
       "method": "GET",
       "headers": {
         "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
