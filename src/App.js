@@ -1,14 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import './App.scss';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { RiVirusLine } from "react-icons/ri";
+import { 
+  Container, 
+  Alert
+} from "reactstrap";
 
-import { Container } from "reactstrap";
-import CountryForm from "./Form/Form";
+// Functional comp
+import SearchForm from "./Form/Form";
 import Chart from "./Chart/Chart";
+import Navbar from "./Navbar/Navbar";
+
 function App() {
   const [countryData, setCountryData] = useState({})
   const [worldData, setWorldData] = useState({})
+  const [flash, setFlash] = useState(false)
+  const [flashMessage, setMessage] = useState("")
+
+  // When FlashMessage state changes it means a new alert needs to be displayed
+  useEffect(() => {
+    if(flashMessage !== "") setFlash(true); // triggers the next useEffect
+  }, [flashMessage])
+
+  // Hide FlashMessage after 3 seconds
+  useEffect(() => {
+    if(flash) setTimeout(() => {
+      setFlash(false)
+      setMessage("")
+    }, 3000)
+  }, [flash])
 
   useEffect(() => {
     // GET World Data for today
@@ -21,25 +41,37 @@ function App() {
     })
     .then(response => {
       response.json()
-        .then(res => 
-          setWorldData(res)
-        )
+        .then(data => {
+          console.log(data[0])
+          if(!data[0]) throw({msg: "Can't process request. Please Try Again!"})
+          setWorldData([{
+            ...data[0],
+            date: new Date().toISOString().split('T')[0],
+            active: data[0].confirmed - data[0].recovered - data[0].deaths,
+            country: "Worldwide"  
+          }])
+        })
+        .catch(err => console.log(err))
     })
-    .catch(err => {
-      console.error(err);
-    });
+    .catch(err => console.error(err))
 
 
   }, [])
 
   return (
-    <Container style={{minHeight: "100vh"}} className="bg-light" fluid>
-      <h2 className="justify-content-center d-flex align-items-center">
-      <RiVirusLine color="green" />
-      <span>Covid-19 Tracker</span>
-      </h2>
-      <CountryForm data={countryData} setData={setCountryData} />
-      {worldData.length && <Chart data={worldData} title="Worldwide"/>}
+    <Container style={{minHeight: "100vh"}} className="px-0 bg-light" fluid>
+      <Navbar />
+      {flash && 
+        <Alert color="warning" className="text-center">
+          {flashMessage}
+        </Alert>
+      }
+      <SearchForm
+        data={countryData} 
+        setData={setCountryData}
+        setMessage={setMessage}
+        />
+      {worldData.length && <Chart data={worldData}/>}
       {countryData.length && <Chart data={countryData} />}
     </Container>
   );

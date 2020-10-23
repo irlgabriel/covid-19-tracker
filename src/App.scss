@@ -1,0 +1,13 @@
+.green-button {
+  padding: .25em 1.25rem;
+  border-radius: 5px;
+  color: #82ca9d;
+  border: 1px solid #82ca9d;
+  background: rgb(241, 241, 241);
+  transition: .3s ease-in-out; 
+  &:hover {
+    color: rgb(241, 241, 241);
+    background: #82ca9d;
+    border: 1px solid rgb(241, 241, 241);
+  }
+}

@@ -6,13 +6,13 @@ import {
   Label,
   Button
 } from "reactstrap"
-export default ({data, setData}) => {
+export default ({data, setData, setMessage}) => {
   const [country, setCountry] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    fetch('https://rapidapi.p.rapidapi.com/report/country/name?date=2020-04-01&name=Italy', {
+    const date = new Date().toISOString().split('T')[0]
+    fetch(`https://rapidapi.p.rapidapi.com/country?name=${country}`, {
       "method": "GET",
       "headers": {
         "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
@@ -21,24 +21,31 @@ export default ({data, setData}) => {
     })
     .then(response => {
       response.json()
-      .then(res => setData( [{...res[0]['provinces'][0], date: new Date().toISOString().split('T')[0]}] ))
+      .then(res => {
+        // In case of invalid country name throw error
+        if(!res[0] || !res[0].country) throw({msg: "Invalid Country Name!"})
+        setData([{
+          ...res[0], 
+          date,
+          active: res[0].confirmed - res[0].recovered - res[0].deaths  
+        }])
+      })
+      .catch(err => setMessage(err.msg))
     })
-    .catch(err => {
-      console.error(err);
-    });
+    .catch(err => setMessage(err.msg))
 
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form className="mt-3" onSubmit={handleSubmit}>
       <FormGroup>
-        <Label className="d-block text-center">Country Name</Label>
-        <Input className="w-50 mx-auto"type="text" onChange={(e) => setCountry(e.target.value)} />
+        <Label className="d-block text-center">View Country Situation</Label>
+        <Input required placeholder="Country..." className="w-50 mx-auto"type="text" onChange={(e) => setCountry(e.target.value)} />
       </FormGroup>
       <FormGroup className="text-center">
-        <Button className="btn btn-sm btn-outline-info btn-light">
+        <button className="green-button">
           Search
-        </Button>
+        </button>
       </FormGroup>
     </Form>
   )
