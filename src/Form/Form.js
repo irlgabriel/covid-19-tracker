@@ -5,7 +5,7 @@ import {
   Input,
   Label,
 } from "reactstrap"
-export default ({countryData, setCountryData, activeCasesData, setActiveCases, setMessage}) => {
+export default ({setCountryCases, setCountryData, countryCasesData, setMessage}) => {
   const [country, setCountry] = useState('')
 
   const handleSubmit = (e) => {
@@ -38,12 +38,17 @@ export default ({countryData, setCountryData, activeCasesData, setActiveCases, s
     // Get Info about cases evolution
     // Active Cases since day one
     fetch(`https://api.covid19api.com/total/country/${country}`)
-     .then(res =>
+     .then(res => {
       res.json()
         .then(data => {
-          setActiveCases(data)
+          // Preprocess date key-value pair to have a standard YYYY-MM-DD format
+          const newCases = [];
+          data.forEach((obj) => {
+            newCases.push({...obj, Date: obj.Date.split('T')[0]})
+          })
+          setCountryCases(newCases)
         })
-      )
+    })
   }
 
   return (

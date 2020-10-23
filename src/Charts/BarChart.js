@@ -7,7 +7,7 @@ export const BarGraph = ({data, title}) => {
   
   return(
     <Container fluid>
-      <h3 className="w-100 text-center">{data[0].country}</h3>
+      <h3 className="w-100 text-center">{ "Today " + data[0].country}</h3>
       <br />
       { 
       <ResponsiveContainer className="mx-auto" width="80%" height={300}>

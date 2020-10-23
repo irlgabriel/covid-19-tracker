@@ -15,3 +15,12 @@
 .navbar-brand {
   user-select: none;
 }
+
+.area-container {
+  width: 50% !important;
+
+  @media screen and (max-width: 768px) {
+    width: 100% !important;
+  }
+
+}

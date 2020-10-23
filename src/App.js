@@ -17,10 +17,8 @@ function App() {
   const [worldData, setWorldData] = useState({})
 
   // Country specific data - loaded upon form submit
-  // Should be renamed to something else - it actually
-  // contains data about every type of case, not just active
   const [countryData, setCountryData] = useState({})
-  const [activeCasesData, setActiveCases] = useState({})
+  const [countryCasesData, setCountryCases] = useState({})
 
   // Flash message states - display errors and notifications 
   const [flash, setFlash] = useState(false)
@@ -28,15 +26,6 @@ function App() {
 
 
   // PREPROCESS DATA FROM API
-  useEffect(() => {
-    if(activeCasesData.length) {
-      activeCasesData.map(day => {
-        return {
-          ...day,
-        }
-      })
-    }
-  }, [activeCasesData])
 
 
   // When FlashMessage state changes it means a new alert needs to be displayed
@@ -64,7 +53,6 @@ function App() {
     .then(response => {
       response.json()
         .then(data => {
-          console.log(data[0])
           if(!data[0]) throw Error({type: "err", msg: "Can't process request. Please Try Again!"})
           setWorldData([{
             ...data[0],
@@ -90,34 +78,34 @@ function App() {
       <SearchForm
         countryData={countryData} 
         setCountryData={setCountryData}
-        activeCasesData={activeCasesData}
-        setActiveCases={setActiveCases}
+        countryCasesData={countryCasesData}
+        setCountryCases={setCountryCases}
         setMessage={setMessage}
         />
-      {/* GENERAL COUNTRY INFO */}
-
       { //General Country Stats Chart
         countryData.length && <BarGraph data={countryData} />
       }
+      { /* Specific Case Types By Country */}
       <Container className="d-flex flex-wrap justify-content-between" fluid>
         { //Confirmed Cases Chart
-          activeCasesData.length && <AreaGraph data={activeCasesData} type="Confirmed" color="#8884d8" />
+          countryCasesData.length && <AreaGraph data={countryCasesData} type="Confirmed" color="#8884d8" />
         }
         { //Active Cases Chart 
-          activeCasesData.length && <AreaGraph data={activeCasesData} type="Active" color="grey"/>
+          countryCasesData.length && <AreaGraph data={countryCasesData} type="Active" color="grey"/>
         }
         { //Recovered Cases Chart
-          activeCasesData.length && <AreaGraph data={activeCasesData} type="Recovered" color="#82ca9d" />
+          countryCasesData.length && <AreaGraph data={countryCasesData} type="Recovered" color="#82ca9d" />
         }
         { //Fatal Cases Chart
-          activeCasesData.length && <AreaGraph data={activeCasesData} type="Deaths" color="black" />
+          countryCasesData.length && <AreaGraph data={countryCasesData} type="Deaths" color="black" />
         }
       </Container>
-
-      <Container className="d-flex flex-wrap justify-content-between" fluid>
         { //General World Info Chart
-        
           worldData.length && <BarGraph data={worldData}/>
+        }
+      <Container className="d-flex flex-wrap justify-content-between" fluid>
+        {
+
         }
       </Container>
     </Container>

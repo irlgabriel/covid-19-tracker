@@ -12,8 +12,8 @@ import { Container } from "reactstrap"
 
 export const AreaGraph = ({data, type, color}) => {
   return (
-    <Container className="w-50" fluid>
-      <h2 className="w-100 text-center">{type}</h2>
+    <Container className="area-container" fluid>
+      <h2 style={{color: color}} className="w-100 text-center">{type}</h2>
       <ResponsiveContainer width="90%" className="mx-auto" height={300}>
         <AreaChart data={data}>
           <YAxis />
