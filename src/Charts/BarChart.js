@@ -4,13 +4,13 @@ import { Container } from "reactstrap"
 
 export const BarGraph = ({data, title}) => {
   // Preprocess data
-  
+  console.log(data)
   return(
-    <Container fluid>
-      <h3 className="w-100 text-center">{ "Today " + data[0].country}</h3>
+    <Container fluid className="main-chart-container">
+      <h3 className="mx-auto">{ "Total " + data[0].country}</h3>
       <br />
       { 
-      <ResponsiveContainer className="mx-auto" width="80%" height={300}>
+      <ResponsiveContainer className="mx-auto" width="100%" height={300}>
         <BarChart data={data}
         margin={{ top: 20, right: 10, left: 30, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" />
