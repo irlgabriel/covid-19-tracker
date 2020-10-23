@@ -8,3 +8,4 @@
 
 ### Issues
 #### - Sometimes first API sends a 429 response (too many requests) - I think it is because it's got a limit of 1req/sec and re-rendering of the main component might be the issue here.
+#### - I don't know how to preprocess date to show it in format "YYYY-MM-DD" insetad of javascript default with T and Z
