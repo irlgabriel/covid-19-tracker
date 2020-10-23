@@ -17,6 +17,8 @@ function App() {
   const [worldData, setWorldData] = useState({})
 
   // Country specific data - loaded upon form submit
+  // Should be renamed to something else - it actually
+  // contains data about every type of case, not just active
   const [countryData, setCountryData] = useState({})
   const [activeCasesData, setActiveCases] = useState({})
 
@@ -98,21 +100,26 @@ function App() {
         countryData.length && <BarGraph data={countryData} />
       }
       <Container className="d-flex flex-wrap justify-content-between" fluid>
+        { //Confirmed Cases Chart
+          activeCasesData.length && <AreaGraph data={activeCasesData} type="Confirmed" color="#8884d8" />
+        }
         { //Active Cases Chart 
-          activeCasesData.length && <AreaGraph data={activeCasesData} type="Active" />
+          activeCasesData.length && <AreaGraph data={activeCasesData} type="Active" color="grey"/>
         }
         { //Recovered Cases Chart
-          activeCasesData.length && <AreaGraph data={activeCasesData} type="Recovered" />
+          activeCasesData.length && <AreaGraph data={activeCasesData} type="Recovered" color="#82ca9d" />
         }
         { //Fatal Cases Chart
-          activeCasesData.length && <AreaGraph data={activeCasesData} type="Deaths" />
+          activeCasesData.length && <AreaGraph data={activeCasesData} type="Deaths" color="black" />
         }
       </Container>
 
+      <Container className="d-flex flex-wrap justify-content-between" fluid>
         { //General World Info Chart
+        
           worldData.length && <BarGraph data={worldData}/>
         }
-      
+      </Container>
     </Container>
   );
 }

@@ -6,11 +6,11 @@ export const BarGraph = ({data, title}) => {
   // Preprocess data
   
   return(
-    <Container fluid className="flex-wrap d-flex justify-content-center">
+    <Container fluid>
       <h3 className="w-100 text-center">{data[0].country}</h3>
       <br />
       { 
-      <ResponsiveContainer width="80%" height={300}>
+      <ResponsiveContainer className="mx-auto" width="80%" height={300}>
         <BarChart data={data}
         margin={{ top: 20, right: 10, left: 30, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" />
