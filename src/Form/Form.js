@@ -4,14 +4,15 @@ import {
   FormGroup,
   Input,
   Label,
-  Button
 } from "reactstrap"
-export default ({data, setData, setMessage}) => {
+export default ({countryData, setCountryData, activeCasesData, setActiveCases, setMessage}) => {
   const [country, setCountry] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const date = new Date().toISOString().split('T')[0]
+
+    // Get General Country stats
     fetch(`https://rapidapi.p.rapidapi.com/country?name=${country}`, {
       "method": "GET",
       "headers": {
@@ -23,8 +24,8 @@ export default ({data, setData, setMessage}) => {
       response.json()
       .then(res => {
         // In case of invalid country name throw error
-        if(!res[0] || !res[0].country) throw({msg: "Invalid Country Name!"})
-        setData([{
+        if(!res[0] || !res[0].country) throw { type: "err", msg:"Invalid Country Name!"}
+        setCountryData([{
           ...res[0], 
           date,
           active: res[0].confirmed - res[0].recovered - res[0].deaths  
@@ -34,6 +35,15 @@ export default ({data, setData, setMessage}) => {
     })
     .catch(err => setMessage(err.msg))
 
+    // Get Info about cases evolution
+    // Active Cases since day one
+    fetch(`https://api.covid19api.com/total/country/${country}`)
+     .then(res =>
+      res.json()
+        .then(data => {
+          setActiveCases(data)
+        })
+      )
   }
 
   return (

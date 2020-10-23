@@ -1,7 +1,8 @@
 import React from "react"
-import { BarChart, Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts"
+import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer } from "recharts"
 import { Container } from "reactstrap"
-export default ({data, title}) => {
+
+export const BarGraph = ({data, title}) => {
   // Preprocess data
   
   return(
