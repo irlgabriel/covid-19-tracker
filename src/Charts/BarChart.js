@@ -16,6 +16,7 @@ export const BarGraph = ({ data, title }) => {
   console.log(data);
   return (
     <Container fluid className="main-chart-container">
+      <h3>Totals</h3>
       {
         <ResponsiveContainer className="mx-auto" width="100%" height={300}>
           <BarChart

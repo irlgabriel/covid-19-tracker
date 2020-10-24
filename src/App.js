@@ -35,6 +35,15 @@ function App() {
   const [flash, setFlash] = useState(false);
   const [flashMessage, setMessage] = useState("");
 
+  // Capitalizes every word of a string.
+  function titleCase(str) {
+    var splitStr = str.toLowerCase().split(' ');
+    for (let i = 0; i < splitStr.length; i++) {
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+    }
+    return splitStr.join(' '); 
+  }
+
   // When FlashMessage state changes it means a new alert needs to be displayed
   useEffect(() => {
     if (flashMessage !== "") setFlash(true); // triggers the next useEffect
@@ -130,7 +139,7 @@ function App() {
           todayConfirmed.length &&
           countryData.length && (
             <Container fluid>
-              <h3 className="text-center border-bottom">{country}</h3>
+              <h3 className="text-center border-bottom">{titleCase(country)}</h3>
               <Container fluid className="section-info">
                 <Container fluid className="text-data-container">
                   <h3>Today</h3>
@@ -161,6 +170,7 @@ function App() {
         /* Specific Case Types Graphs By Country */
         countryCasesData.length && (
           <Container className="d-flex flex-wrap justify-content-between" fluid>
+            <h3 className="w-100 ml-4 pl-2 my-3">Cases Evolution since Day 1</h3>
             <AreaGraph
               data={countryCasesData}
               type="Confirmed"

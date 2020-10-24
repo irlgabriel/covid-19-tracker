@@ -13,6 +13,7 @@ export default ({
   setLoading
 }) => {
   const [countries, setCountries] = useState([])
+
   // Get all countries when component mounts
   useEffect(() => {
     fetch('https://api.covid19api.com/countries')
@@ -27,7 +28,7 @@ export default ({
     e.preventDefault();
 
     // check if country is in countries array (aka if it is valid)
-    if(!countries.find(cName => cName === country)) {
+    if(!countries.find(cName => cName.toLowerCase() === country.toLowerCase())) {
       setMessage("Invalid Country Name!")
       return;
     }
