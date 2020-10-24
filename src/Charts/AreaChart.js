@@ -6,14 +6,16 @@ import {
   CartesianGrid,
   Tooltip,
   Area,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
-import { Container } from "reactstrap"
+import { Container } from "reactstrap";
 
-export const AreaGraph = ({data, type, color}) => {
+export const AreaGraph = ({ data, type, color }) => {
   return (
     <Container className="area-container" fluid>
-      <h2 style={{color: color}} className="w-100 text-center">{type}</h2>
+      <h2 style={{ color: color }} className="w-100 text-center">
+        {type}
+      </h2>
       <ResponsiveContainer width="90%" className="mx-auto" height={300}>
         <AreaChart data={data}>
           <YAxis />
@@ -24,5 +26,5 @@ export const AreaGraph = ({data, type, color}) => {
         </AreaChart>
       </ResponsiveContainer>
     </Container>
-  )
-}
+  );
+};

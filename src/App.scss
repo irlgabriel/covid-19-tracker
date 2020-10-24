@@ -1,10 +1,10 @@
 .green-button {
-  padding: .25em 1.25rem;
+  padding: 0.25em 1.25rem;
   border-radius: 5px;
   color: #82ca9d;
   border: 1px solid #82ca9d;
   background: rgb(241, 241, 241);
-  transition: .3s ease-in-out; 
+  transition: 0.3s ease-in-out;
   &:hover {
     color: rgb(241, 241, 241);
     background: #82ca9d;
@@ -22,7 +22,6 @@
   @media screen and (max-width: 768px) {
     width: 100% !important;
   }
-
 }
 
 .section-info {
@@ -35,7 +34,7 @@
 .main-chart-container {
   flex: 1;
 }
-.text-data-container { 
+.text-data-container {
   width: 30% !important;
   @media screen and (max-width: 768px) {
     width: 100% !important;
