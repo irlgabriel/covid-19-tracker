@@ -10,5 +10,7 @@
 #### - 
 
 ### TO-DO
-#### Re-think the main layout - I want to give it more of a mobile look
-#### Maybe give users more options for data querying, like seeing charts just for a specific timeline
+#### - Re-think the main layout - I want to give it more of a mobile look.
+#### - Maybe give users more options for data querying, like seeing charts just for a specific timeline.
+#### - Add better (error?) feedback. Right now if a bad response comes back from the server I just show a "Invalid country name" alert, which is not as horrible as it sounds REALLY, because so far that was the case every time a bad response was sent. 
+#### - Add loading animations while querying data and some toasts notifications afterwards.
