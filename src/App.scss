@@ -25,16 +25,21 @@
 }
 
 .section-info {
+  margin-top: 10px;
   display: flex;
   @media screen and (max-width: 768px) {
     flex-direction: column;
   }
+
 }
 
 .main-chart-container {
   flex: 1;
 }
 .text-data-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 30% !important;
   @media screen and (max-width: 768px) {
     width: 100% !important;

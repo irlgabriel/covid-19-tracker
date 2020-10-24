@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Form, FormGroup, Input, Label } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 export default ({
   setCountryCases,
   setCountryData,
@@ -7,20 +7,39 @@ export default ({
   setTodayRecovered,
   setTodayDead,
   setTodayConfirmed,
+  country,
+  setCountry,
+  loading,
+  setLoading
 }) => {
-  const [country, setCountry] = useState("");
-
+  const [countries, setCountries] = useState([])
+  // Get all countries when component mounts
+  useEffect(() => {
+    fetch('https://api.covid19api.com/countries')
+      .then(res =>
+        res.json()
+          .then(data => {
+            setCountries(data.map(obj => obj.Country))
+          })
+      )
+  }, [])
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // check if country is in countries array (aka if it is valid)
+    if(!countries.find(cName => cName === country)) {
+      setMessage("Invalid Country Name!")
+      return;
+    }
+
     const today = new Date().toISOString().split("T")[0];
     const yesterday = new Date(Date.now() - 2 * 86400000)
       .toISOString()
       .split("T")[0];
-
-    console.log(today);
-    console.log(yesterday);
-    // Get General Country stats
-    fetch(`https://rapidapi.p.rapidapi.com/country?name=${country}`, {
+      
+    setLoading(true);
+    Promise.all([
+      fetch(`https://rapidapi.p.rapidapi.com/country?name=${country}`, {
       method: "GET",
       headers: {
         "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
@@ -31,9 +50,6 @@ export default ({
         response
           .json()
           .then((res) => {
-            // In case of invalid country name throw error
-            if (!res[0] || !res[0].country)
-              throw { type: "err", msg: "Invalid Country Name!" };
             setCountryData([
               {
                 ...res[0],
@@ -44,11 +60,9 @@ export default ({
           })
           .catch((err) => setMessage(err.msg));
       })
-      .catch((err) => setMessage(err.msg));
-
-    // Get Info about cases evolution
-    // Active Cases since day one
-    fetch(`https://api.covid19api.com/total/country/${country}`).then((res) => {
+      .catch((err) => setMessage(err.msg))
+     ,
+     fetch(`https://api.covid19api.com/total/country/${country}`).then((res) => {
       res
         .json()
         .then((data) => {
@@ -59,10 +73,8 @@ export default ({
           });
           setCountryCases(newCases);
         })
-        .catch((err) => console.log(err));
-    });
-
-    // Get Today Death Cases for this country
+        .catch((err) => console.log(err))
+    }),
     fetch(
       `https://api.covid19api.com/country/${country}/status/deaths?from=${yesterday}&to=${today}`
     ).then((res) =>
@@ -71,9 +83,7 @@ export default ({
           setTodayDead([{ Cases: data[1].Cases - data[0].Cases }]);
         }
       })
-    );
-
-    // Get Today Recovered Cases for this country
+    ),
     fetch(
       `https://api.covid19api.com/country/${country}/status/recovered?from=${yesterday}&to=${today}`
     ).then((res) =>
@@ -82,9 +92,7 @@ export default ({
           setTodayRecovered([{ Cases: data[1].Cases - data[0].Cases }]);
         }
       })
-    );
-
-    // Get Today confirmed Cases for this country
+    ),
     fetch(
       `https://api.covid19api.com/country/${country}/status/confirmed?from=${yesterday}&to=${today}`
     ).then((res) =>
@@ -93,7 +101,11 @@ export default ({
           setTodayConfirmed([{ Cases: data[1].Cases - data[0].Cases }]);
         }
       })
-    );
+    )
+  ])
+    .then(
+      setLoading(false)
+    )
   };
 
   return (
@@ -109,7 +121,14 @@ export default ({
         />
       </FormGroup>
       <FormGroup className="text-center">
-        <button className="green-button">Search</button>
+        {
+          !loading &&
+          <button className="green-button">Search</button>
+        }
+        {
+          loading && 
+          <Spinner color="success" />
+        }
       </FormGroup>
     </Form>
   );
