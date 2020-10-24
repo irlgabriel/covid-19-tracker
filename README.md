@@ -7,3 +7,8 @@
 #### - [This](https://documenter.getpostman.com/view/10808728/SzS8rjbc#6fbc46d6-0ddf-400b-a743-a149e9bba381) API for Country specific data and new cases today.
 
 ### Issues
+#### - 
+
+### TO-DO
+#### Re-think the main layout - I want to give it more of a mobile look
+#### Maybe give users more options for data querying, like seeing charts just for a specific timeline
