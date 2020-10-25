@@ -64,7 +64,7 @@ function App() {
     const yesterday = new Date(Date.now() - 2 * 86400000)
       .toISOString()
       .split("T")[0];
-      
+
     setLoading(true)
     Promise.all([
       fetch("https://rapidapi.p.rapidapi.com/totals", {
@@ -140,8 +140,8 @@ function App() {
           todayConfirmed.length &&
           countryData.length && (
             <Container fluid>
-              <h3 className="text-center border-bottom">{titleCase(country)}</h3>
               <Container fluid className="section-info">
+                <h2 className="text-center border-bottom">{titleCase(country)}</h2>
                 <Container fluid className="text-data-container">
                   <h3>Today</h3>
                   <p>
@@ -192,9 +192,10 @@ function App() {
         // MAIN CONTAINER WORLD
         todayWorld.Recovered && worldData.length && (
           <Container fluid className="py-2">
-            <h3 className="border-bottom text-center">World Status</h3>
             {/* Flex container */}
             <Container fluid className="section-info">
+            <h2 className="border-bottom text-center">World Status</h2>
+
               {/* Flex column container */}
               <Container fluid className="text-data-container">
                 <h3>Today</h3>
