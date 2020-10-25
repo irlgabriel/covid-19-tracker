@@ -24,21 +24,14 @@ export default ({
           })
       )
   }, [])
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    // check if country is in countries array (aka if it is valid)
-    if(!countries.find(cName => cName.toLowerCase() === country.toLowerCase())) {
-      setMessage("Invalid Country Name!")
-      return;
-    }
-
+  useEffect(() => {
+    
     const today = new Date().toISOString().split("T")[0];
     const yesterday = new Date(Date.now() - 2 * 86400000)
       .toISOString()
       .split("T")[0];
       
-    setLoading(true);
     Promise.all([
       fetch(`https://rapidapi.p.rapidapi.com/country?name=${country}`, {
       method: "GET",
@@ -107,6 +100,18 @@ export default ({
     .then(
       setLoading(false)
     )
+  })
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // check if country is in countries array (aka if it is valid)
+    if(!countries.find(cName => cName.toLowerCase() === country.toLowerCase())) {
+      setMessage("Invalid Country Name!")
+      return;
+    }
+
+    setLoading(true);
+    
   };
 
   return (
