@@ -13,7 +13,6 @@ import { Container } from "reactstrap";
 
 export const BarGraph = ({ data, title }) => {
   // Preprocess data
-  console.log(data);
   return (
     <Container fluid className="main-chart-container">
       <h3>Totals</h3>

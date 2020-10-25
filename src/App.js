@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Alert } from "reactstrap";
 
 // Functional comp
+import LoadingOverlay from "./LoadingOverlay/LoadingOverlay"
 import SearchForm from "./Form/Form";
 import { BarGraph } from "./Charts/BarChart";
 import Navbar from "./Navbar/Navbar";
@@ -63,6 +64,7 @@ function App() {
     const yesterday = new Date(Date.now() - 2 * 86400000)
       .toISOString()
       .split("T")[0];
+      
     setLoading(true)
     Promise.all([
       fetch("https://rapidapi.p.rapidapi.com/totals", {
@@ -112,6 +114,7 @@ function App() {
 
   return (
     <Container style={{ minHeight: "100vh" }} className="px-0 bg-light" fluid>
+      {loading && <LoadingOverlay />}
       <Navbar />
       {flash && (
         <Alert color="warning" className="text-center">
@@ -128,8 +131,6 @@ function App() {
         setTodayDead={setTodayDead}
         setTodayConfirmed={setTodayConfirmed}
         setTodayRecovered={setTodayRecovered}
-        loading={loading}
-        setLoading={setLoading}
         />
       {
         // <!-- DO NOT SHOW UNTILL COUNTRY INPUT -->
