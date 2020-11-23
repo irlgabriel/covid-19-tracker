@@ -1,6 +1,7 @@
 ## Covid-19 Stats App.
 
 ### Info
+#### - [Current Deployment](https://irlgabriel.github.io/covid-19-tracker/)
 #### - Built with React
 #### - Used [Recharts](https://recharts.org) for displaying charts
 #### - [This](https://rapidapi.com/Gramzivi/api/covid-19-data?endpoint=apiendpoint_90422c25-72f4-4e9a-a792-67e3dc7553a1) API for WORLDWIDE covid-19 data
