@@ -67,6 +67,7 @@ function App() {
 
     setLoading(true)
     Promise.all([
+      /*
       fetch("https://rapidapi.p.rapidapi.com/totals", {
         method: "GET",
         headers: {
@@ -91,18 +92,56 @@ function App() {
             .catch((err) => console.log(err));
         })
         .catch((err) => console.error(err)),
-
+        */
+        /*
+        // this one returns null lately
         fetch(
           `https://api.covid19api.com/world?from=${yesterday}&to=${today}`
         ).then((res) => {
           res.json().then((data) => {
+            console.log(data);
+            
             setTodayWorld({
               Confirmed: data[1].NewConfirmed,
               Deaths: data[1].NewDeaths,
               Recovered: data[1].NewRecovered,
             });
+            
           });
+        }), 
+        */
+       fetch("https://covid-19-statistics.p.rapidapi.com/reports/total?date=" + yesterday, {
+        "method": "GET",
+        "headers": {
+          "x-rapidapi-key": "d89eb58edamsh10814d1e692895ep158751jsn8a8b4c01281a",
+          "x-rapidapi-host": "covid-19-statistics.p.rapidapi.com"
+        }
+      })
+      .then(response => {
+        response.json()
+        .then(data => {
+          console.log(data); 
+          setTodayWorld({
+          Confirmed: data.data.confirmed_diff,
+          Deaths: data.data.deaths_diff,
+          Recovered: data.data.recovered_diff
+          })
+          setWorldData([
+            {
+              confirmed: data.data.confirmed,
+              recovered: data.data.recovered,
+              //critical: data.data.critical,
+              active: data.data.active,
+              deaths: data.data.deaths,
+              date: new Date().toISOString().split("T")[0],            
+              country: "Worldwide",
+            },
+          ]);
         })
+      })
+      .catch(err => {
+        console.error(err);
+      })
     ])
     .then(() => {
       setLoading(false);
@@ -135,9 +174,6 @@ function App() {
       {
         // <!-- DO NOT SHOW UNTILL COUNTRY INPUT -->
         // MAIN CONTAINER COUNTRY
-        todayRecovered.length &&
-          todayDead.length &&
-          todayConfirmed.length &&
           countryData.length && (
             <Container fluid>
               <Container fluid className="section-info">
@@ -147,17 +183,17 @@ function App() {
                   <p>
                     Recovered:{" "}
                     <span style={{ color: "#82ca9d" }}>
-                      +{todayRecovered[0].Cases}
+                      +{todayRecovered}
                     </span>
                   </p>
                   <p>
                     Deaths:{" "}
-                    <span style={{ color: "black" }}>+{todayDead[0].Cases}</span>
+                    <span style={{ color: "black" }}>+{todayDead}</span>
                   </p>
                   <p>
                     Confirmed:{" "}
                     <span style={{ color: "#8884d8" }}>
-                      +{todayConfirmed[0].Cases}
+                      +{todayConfirmed}
                     </span>
                   </p>
                 </Container>

@@ -41,23 +41,26 @@ export default ({
       setLoading(true)
       Promise.all([
         fetch(`https://rapidapi.p.rapidapi.com/country?name=${country}`, {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
-          "x-rapidapi-key": "d89eb58edamsh10814d1e692895ep158751jsn8a8b4c01281a",
-        },
-      })
+          method: "GET",
+          headers: {
+            "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
+            "x-rapidapi-key": "d89eb58edamsh10814d1e692895ep158751jsn8a8b4c01281a",
+          },
+        })
         .then((response) => {
           response
             .json()
             .then((res) => {
               setCountryData([
                 {
-                  ...res[0],
                   date: today,
+                  confirmed: res[0].confirmed,
+                  recovered: res[0].recovered,
+                  critical: res[0].critical,
+                  deaths: res[0].deaths,
                   active: res[0].confirmed - res[0].recovered - res[0].deaths,
-                },
-              ]);
+                }],
+              );
             })
             .catch((err) => setMessage(err.msg));
         })
@@ -73,9 +76,16 @@ export default ({
               newCases.push({ ...obj, Date: obj.Date.split("T")[0] });
             });
             setCountryCases(newCases);
+            // Preprocess this request's data to gather recovered/deaths/confirmed from last 24h
+            const len = data.length;
+            console.log(data[len-1]);
+            setTodayDead(data[len - 1].Deaths - data[len -2].Deaths);
+            setTodayRecovered(data[len - 1].Recovered - data[len -2].Recovered);
+            setTodayConfirmed(data[len - 1].Confirmed - data[len -2].Confirmed)
           })
           .catch((err) => console.log(err))
       }),
+      /*
       fetch(
         `https://api.covid19api.com/country/${country}/status/deaths?from=${yesterday}&to=${today}`
       ).then((res) =>
@@ -103,6 +113,7 @@ export default ({
           }
         })
       )
+      */
     ])
       .then(
         // adds .5s to the loading time. 
