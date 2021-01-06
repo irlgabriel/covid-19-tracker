@@ -28,11 +28,14 @@ export default ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const form = e.target;
+    const country_name = form.querySelector('#country_name').value
     // check if country is in countries array (aka if it is valid)
-    if(!countries.find(cName => cName.toLowerCase() === country.toLowerCase())) {
+    if(!countries.find(cName => cName.toLowerCase() === country_name.toLowerCase())) {
       setMessage("Invalid Country Name!")
       return;
     }
+    
     const today = new Date().toISOString().split("T")[0];
     const yesterday = new Date(Date.now() - 2 * 86400000)
       .toISOString()
@@ -40,7 +43,7 @@ export default ({
         
       setLoading(true)
       Promise.all([
-        fetch(`https://rapidapi.p.rapidapi.com/country?name=${country}`, {
+        fetch(`https://rapidapi.p.rapidapi.com/country?name=${country_name}`, {
           method: "GET",
           headers: {
             "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
@@ -66,7 +69,7 @@ export default ({
         })
         .catch((err) => setMessage(err.msg))
       ,
-      fetch(`https://api.covid19api.com/total/country/${country}`).then((res) => {
+      fetch(`https://api.covid19api.com/total/country/${country_name}`).then((res) => {
         res
           .json()
           .then((data) => {
@@ -119,8 +122,10 @@ export default ({
         // adds .5s to the loading time. 
         setTimeout(() => {
           setLoading(false) 
+          setCountry(country_name);
         }, 500)
       )
+      .catch(err => setMessage(err.response.message))
     
   };
 
@@ -130,11 +135,11 @@ export default ({
       <FormGroup>
         <Label className="d-block text-center">View Country Situation</Label>
         <Input
+          id='country_name'
           required
           placeholder="Country..."
           className="w-50 mx-auto"
           type="text"
-          onChange={(e) => setCountry(e.target.value)}
         />
       </FormGroup>
       <FormGroup className="text-center">
