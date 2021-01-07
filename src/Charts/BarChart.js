@@ -31,7 +31,7 @@ export const BarGraph = ({ data, title }) => {
             <Bar dataKey="recovered" fill="#82ca9d" />
             <Bar dataKey="active" fill="grey" />
             <Bar dataKey="deaths" fill="rgba(0,0,0,1)" />
-            <Bar dataKey="critical" fill="red" />
+            {/*<Bar dataKey="critical" fill="red" /*/}
           </BarChart>
         </ResponsiveContainer>
       }

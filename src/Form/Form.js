@@ -9,6 +9,7 @@ export default ({
   setTodayDead,
   setTodayConfirmed,
   country,
+  countryData,
   setCountry,
 }) => {
   const [countries, setCountries] = useState([])

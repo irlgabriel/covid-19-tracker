@@ -120,7 +120,6 @@ function App() {
       .then(response => {
         response.json()
         .then(data => {
-          console.log(data); 
           setTodayWorld({
           Confirmed: data.data.confirmed_diff,
           Deaths: data.data.deaths_diff,
@@ -130,7 +129,9 @@ function App() {
             {
               confirmed: data.data.confirmed,
               recovered: data.data.recovered,
-              //critical: data.data.critical,
+              /* This api doesn't have critical info
+              critical: data.data.critical,
+              */
               active: data.data.active,
               deaths: data.data.deaths,
               date: new Date().toISOString().split("T")[0],            
