@@ -6,7 +6,7 @@ import {
   Cell,
 } from "recharts";
 
-export const PieGraph = ({data}) => {
+export const PieGraph = ({key, data}) => {
 
   const colors = [
     "grey",
@@ -15,8 +15,9 @@ export const PieGraph = ({data}) => {
     'black'
   ]
   return (
-    <PieChart height={250} width={600}>
+    <PieChart key={key} height={250} width={600}>
       <Pie
+        key={key}
         data={data}
         cx="50%"
         cy="50%"
@@ -25,7 +26,7 @@ export const PieGraph = ({data}) => {
         dataKey='value' 
         nameKey='status'
       >
-        {data.map((entry, index) => <Cell  key={`cell-${index}`} fill={colors[index]} />)}
+        {data.map((entry, index) => <Cell  key={`cell-${entry.value}`} fill={colors[index]} />)}
       </Pie>
     </PieChart>
   )

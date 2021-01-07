@@ -129,7 +129,7 @@ function App() {
       {
         // <!-- DO NOT SHOW UNTILL COUNTRY INPUT -->
         // MAIN CONTAINER COUNTRY
-          countryData.confirmed ? (
+          countryData.confirmed && todayRecovered ? (
             <Container fluid>
               <Container fluid className="section-info">
                 <h2 className="text-center border-bottom">{titleCase(country)}</h2>
@@ -159,7 +159,9 @@ function App() {
                   </p>
                   
                 </Container>
-                <PieGraph data={[
+                <PieGraph 
+                key={'country-pie'}
+                data={[
                   {status: 'Active',
                   value: todayActive
                   },
@@ -203,7 +205,7 @@ function App() {
 
       {
         // MAIN CONTAINER WORLD
-        worldData.active ? (
+        worldData.active && todayWorld.Confirmed ? (
           <Container fluid className="py-2">
             {/* Flex container */}
             <Container fluid className="section-info">
@@ -237,7 +239,7 @@ function App() {
               </Container>
               {/*<BarGraph data={worldData} />*/}
               <PieGraph
-                
+                key={'world-pie'}
                 data={
                   [{
                     status: 'Active',
