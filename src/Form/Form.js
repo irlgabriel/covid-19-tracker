@@ -55,7 +55,7 @@ export default ({
           response
             .json()
             .then((res) => {
-              setCountryData([
+              setCountryData(
                 {
                   date: today,
                   confirmed: res[0].confirmed,
@@ -63,7 +63,7 @@ export default ({
                   critical: res[0].critical,
                   deaths: res[0].deaths,
                   active: res[0].confirmed - res[0].recovered - res[0].deaths,
-                }],
+                },
               );
             })
             .catch((err) => setMessage(err.msg));
@@ -81,6 +81,7 @@ export default ({
             });
             setCountryCases(newCases);
             // Preprocess this request's data to gather recovered/deaths/confirmed from last 24h
+            
             const len = data.length;
             console.log(data[len-1]);
             setTodayDead(data[len - 1].Deaths - data[len -2].Deaths);

@@ -9,6 +9,8 @@ import SearchForm from "./Form/Form";
 import { BarGraph } from "./Charts/BarChart";
 import Navbar from "./Navbar/Navbar";
 import { AreaGraph } from "./Charts/AreaChart";
+import { PieGraph } from "./Charts/PieChart";
+import { ResponsiveContainer } from "recharts";
 
 function App() {
   // Loading state?
@@ -25,9 +27,9 @@ function App() {
   const [countryCasesData, setCountryCases] = useState({});
 
   // Today Only -> Country cases Today
-  const [todayConfirmed, setTodayConfirmed] = useState({});
-  const [todayRecovered, setTodayRecovered] = useState({});
-  const [todayDead, setTodayDead] = useState({});
+  const [todayConfirmed, setTodayConfirmed] = useState(0);
+  const [todayRecovered, setTodayRecovered] = useState(0);
+  const [todayDead, setTodayDead] = useState(0);
 
   // Form Input
   const [country, setCountry] = useState("");
@@ -61,96 +63,51 @@ function App() {
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    const yesterday = new Date(Date.now() - 2 * 86400000)
+    const yesterday = new Date(Date.now() - 86400000)
       .toISOString()
       .split("T")[0];
 
     setLoading(true)
-    Promise.all([
-      /*
-      fetch("https://rapidapi.p.rapidapi.com/totals", {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
-          "x-rapidapi-key": "d89eb58edamsh10814d1e692895ep158751jsn8a8b4c01281a",
-        },
-      })
-        .then((response) => {
-          response
-            .json()
-            .then((data) => {
-              //if(!data[0]) throw Error({type: "err", msg: "Can't process request. Please Try Again!"})
-              setWorldData([
-                {
-                  ...data[0],
-                  date: new Date().toISOString().split("T")[0],
-                  active: data[0].confirmed - data[0].recovered - data[0].deaths,
-                  country: "Worldwide",
-                },
-              ]);
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.error(err)),
-        */
-        /*
-        // this one returns null lately
-        fetch(
-          `https://api.covid19api.com/world?from=${yesterday}&to=${today}`
-        ).then((res) => {
-          res.json().then((data) => {
-            console.log(data);
-            
-            setTodayWorld({
-              Confirmed: data[1].NewConfirmed,
-              Deaths: data[1].NewDeaths,
-              Recovered: data[1].NewRecovered,
-            });
-            
-          });
-        }), 
-        */
-       fetch("https://covid-19-statistics.p.rapidapi.com/reports/total?date=" + yesterday, {
-        "method": "GET",
-        "headers": {
-          "x-rapidapi-key": "d89eb58edamsh10814d1e692895ep158751jsn8a8b4c01281a",
-          "x-rapidapi-host": "covid-19-statistics.p.rapidapi.com"
-        }
-      })
-      .then(response => {
-        response.json()
-        .then(data => {
-          setTodayWorld({
-          Confirmed: data.data.confirmed_diff,
-          Deaths: data.data.deaths_diff,
-          Recovered: data.data.recovered_diff
-          })
-          setWorldData([
-            {
-              confirmed: data.data.confirmed,
-              recovered: data.data.recovered,
-              /* This api doesn't have critical info
-              critical: data.data.critical,
-              */
-              active: data.data.active,
-              deaths: data.data.deaths,
-              date: new Date().toISOString().split("T")[0],            
-              country: "Worldwide",
-            },
-          ]);
-        })
-      })
-      .catch(err => {
-        console.error(err);
-      })
-    ])
-    .then(() => {
-      setLoading(false);
+    fetch("https://covid-19-statistics.p.rapidapi.com/reports/total?date=" + yesterday, {
+      "method": "GET",
+      "headers": {
+        "x-rapidapi-key": "d89eb58edamsh10814d1e692895ep158751jsn8a8b4c01281a",
+        "x-rapidapi-host": "covid-19-statistics.p.rapidapi.com"
+      }
     })
-   
+    .then(response => {
+      response.json()
+      .then(data => {
+        setTodayWorld({
+        Confirmed: data.data.confirmed_diff,
+        Deaths: data.data.deaths_diff,
+        Recovered: data.data.recovered_diff,
+        Active: data.data.active_diff
+        })
+        setWorldData(
+          {
+            confirmed: data.data.confirmed,
+            recovered: data.data.recovered,
+            /* This api doesn't have critical info
+            critical: data.data.critical,
+            */
+            active: data.data.active,
+            deaths: data.data.deaths,
+            date: new Date().toISOString().split("T")[0],            
+            country: "Worldwide",
+          },
+        );
+        setLoading(false);
+      })
+    })
+    .catch(err => {
+      console.error(err);
+    })
+    }, []);
 
-    
-  }, []);
+    useEffect(() => {
+      console.log(todayConfirmed,todayDead, todayRecovered);
+    }, [todayRecovered])
 
   return (
     <Container style={{ minHeight: "100vh" }} className="px-0 bg-light" fluid>
@@ -175,7 +132,7 @@ function App() {
       {
         // <!-- DO NOT SHOW UNTILL COUNTRY INPUT -->
         // MAIN CONTAINER COUNTRY
-          countryData.length && (
+          countryData.confirmed ? (
             <Container fluid>
               <Container fluid className="section-info">
                 <h2 className="text-center border-bottom">{titleCase(country)}</h2>
@@ -198,36 +155,41 @@ function App() {
                     </span>
                   </p>
                 </Container>
-                <BarGraph data={countryData} />
+                <BarGraph data={[countryData]} />
               </Container>
             </Container>
           )
+          : <></>
       }
 
       {
         /* Specific Case Types Graphs By Country */
-        countryCasesData.length && (
+        countryCasesData.length ? (
           <Container className="d-flex flex-wrap justify-content-between" fluid>
             <h3 className="w-100 ml-4 pl-2 my-3">Cases Evolution since Day 1</h3>
-            <AreaGraph
-              data={countryCasesData}
-              type="Confirmed"
-              color="#8884d8"
+
+            <PieGraph data={[
+              {status: 'Active',
+               value: countryCasesData.active
+              },
+              {status: 'Confirmed',
+               value: countryCasesData.confirmed
+              },
+              {status: 'Recovered',
+               value: countryCasesData.recovered
+              },
+              {status: 'deaths',
+               value: countryCasesData.deaths
+              },
+              ]}
             />
-            <AreaGraph data={countryCasesData} type="Active" color="grey" />
-            <AreaGraph
-              data={countryCasesData}
-              type="Recovered"
-              color="#82ca9d"
-            />
-            <AreaGraph data={countryCasesData} type="Deaths" color="black" />
           </Container>
-        )
+        ) : <></>
       }
 
       {
         // MAIN CONTAINER WORLD
-        todayWorld.Recovered && worldData.length && (
+        worldData.active ? (
           <Container fluid className="py-2">
             {/* Flex container */}
             <Container fluid className="section-info">
@@ -237,26 +199,55 @@ function App() {
               <Container fluid className="text-data-container">
                 <h3>Today</h3>
                 <p>
+                  Confirmed:{" "}
+                  <span style={{fontWeight: 'bold', color: "#8884d8" }}>
+                    +{todayWorld.Confirmed}
+                  </span>
+                </p>
+                <p>
+                  Active:{" "}
+                  <span style={{fontWeight: 'bold', color: "grey" }}>
+                    +{todayWorld.Active}
+                  </span>
+                </p>
+                <p>
                   Recovered:{" "}
-                  <span style={{ color: "#82ca9d" }}>
+                  <span style={{fontWeight: 'bold', color: "#82ca9d" }}>
                     +{todayWorld.Recovered}
                   </span>
                 </p>
                 <p>
                   Deaths:{" "}
-                  <span style={{ color: "black" }}>+{todayWorld.Deaths}</span>
-                </p>
-                <p>
-                  Confirmed:{" "}
-                  <span style={{ color: "#8884d8" }}>
-                    +{todayWorld.Confirmed}
-                  </span>
+                  <span style={{fontWeight: 'bold', color: "black" }}>+{todayWorld.Deaths}</span>
                 </p>
               </Container>
-              <BarGraph data={worldData} />
+              {/*<BarGraph data={worldData} />*/}
+              <PieGraph
+                
+                data={
+                  [{
+                    status: 'Active',
+                    value: worldData.active
+                  }, 
+                  {
+                    status: 'Confirmed',
+                    value: worldData.confirmed
+                  },
+                  {
+                    status: 'Recovered',
+                    value: worldData.recovered
+                  },
+                  {
+                    status: 'Deaths',
+                    value: worldData.deaths
+                  }
+                ]
+                } 
+              />
+              
             </Container>
           </Container>
-        )
+        ) : <></>
       }
     </Container>
   );
