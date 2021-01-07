@@ -90,35 +90,6 @@ export default ({
           })
           .catch((err) => console.log(err))
       }),
-      /*
-      fetch(
-        `https://api.covid19api.com/country/${country}/status/deaths?from=${yesterday}&to=${today}`
-      ).then((res) =>
-        res.json().then((data) => {
-          if (data[1]) {
-            setTodayDead([{ Cases: data[1].Cases - data[0].Cases }]);
-          }
-        })
-      ),
-      fetch(
-        `https://api.covid19api.com/country/${country}/status/recovered?from=${yesterday}&to=${today}`
-      ).then((res) =>
-        res.json().then((data) => {
-          if (data[1]) {
-            setTodayRecovered([{ Cases: data[1].Cases - data[0].Cases }]);
-          }
-        })
-      ),
-      fetch(
-        `https://api.covid19api.com/country/${country}/status/confirmed?from=${yesterday}&to=${today}`
-      ).then((res) =>
-        res.json().then((data) => {
-          if (data[1]) {
-            setTodayConfirmed([{ Cases: data[1].Cases - data[0].Cases }]);
-          }
-        })
-      )
-      */
     ])
       .then(
         // adds .5s to the loading time. 
