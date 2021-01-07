@@ -8,6 +8,7 @@ export default ({
   setTodayRecovered,
   setTodayDead,
   setTodayConfirmed,
+  setTodayActive,
   country,
   countryData,
   setCountry,
@@ -38,9 +39,6 @@ export default ({
     }
     
     const today = new Date().toISOString().split("T")[0];
-    const yesterday = new Date(Date.now() - 2 * 86400000)
-      .toISOString()
-      .split("T")[0];
         
       setLoading(true)
       Promise.all([
@@ -87,6 +85,7 @@ export default ({
             setTodayDead(data[len - 1].Deaths - data[len -2].Deaths);
             setTodayRecovered(data[len - 1].Recovered - data[len -2].Recovered);
             setTodayConfirmed(data[len - 1].Confirmed - data[len -2].Confirmed)
+            setTodayActive(data[len - 1].Active - data[len - 2].Active)
           })
           .catch((err) => console.log(err))
       }),

@@ -6,11 +6,9 @@ import { Container, Alert } from "reactstrap";
 // Functional comp
 import LoadingOverlay from "./LoadingOverlay/LoadingOverlay"
 import SearchForm from "./Form/Form";
-import { BarGraph } from "./Charts/BarChart";
 import Navbar from "./Navbar/Navbar";
 import { AreaGraph } from "./Charts/AreaChart";
 import { PieGraph } from "./Charts/PieChart";
-import { ResponsiveContainer } from "recharts";
 
 function App() {
   // Loading state?
@@ -30,6 +28,7 @@ function App() {
   const [todayConfirmed, setTodayConfirmed] = useState(0);
   const [todayRecovered, setTodayRecovered] = useState(0);
   const [todayDead, setTodayDead] = useState(0);
+  const [todayActive, setTodayActive] = useState(0);
 
   // Form Input
   const [country, setCountry] = useState("");
@@ -105,9 +104,6 @@ function App() {
     })
     }, []);
 
-    useEffect(() => {
-      console.log(todayConfirmed,todayDead, todayRecovered);
-    }, [todayRecovered])
 
   return (
     <Container style={{ minHeight: "100vh" }} className="px-0 bg-light" fluid>
@@ -125,6 +121,7 @@ function App() {
         setCountry={setCountry}
         setCountryCases={setCountryCases}
         setMessage={setMessage}
+        setTodayActive={setTodayActive}
         setTodayDead={setTodayDead}
         setTodayConfirmed={setTodayConfirmed}
         setTodayRecovered={setTodayRecovered}
@@ -139,23 +136,44 @@ function App() {
                 <Container fluid className="text-data-container">
                   <h3>Today</h3>
                   <p>
+                    Confirmed:{" "}
+                    <span style={{fontWeight: 'bold', color: "#8884d8" }}>
+                      +{todayConfirmed}
+                    </span>
+                  </p>
+                  <p>
                     Recovered:{" "}
-                    <span style={{ color: "#82ca9d" }}>
+                    <span style={{fontWeight: 'bold', color: "#82ca9d" }}>
                       +{todayRecovered}
                     </span>
                   </p>
                   <p>
-                    Deaths:{" "}
-                    <span style={{ color: "black" }}>+{todayDead}</span>
-                  </p>
-                  <p>
-                    Confirmed:{" "}
-                    <span style={{ color: "#8884d8" }}>
-                      +{todayConfirmed}
+                    Active:{" "}
+                    <span style={{fontWeight: 'bold', color: "grey" }}>
+                      +{todayActive}
                     </span>
                   </p>
+                  <p>
+                    Deaths:{" "}
+                    <span style={{fontWeight: 'bold', color: "black" }}>+{todayDead}</span>
+                  </p>
+                  
                 </Container>
-                <BarGraph data={[countryData]} />
+                <PieGraph data={[
+                  {status: 'Active',
+                  value: todayActive
+                  },
+                  {status: 'Confirmed',
+                  value: todayConfirmed
+                  },
+                  {status: 'Recovered',
+                  value: todayRecovered
+                  },
+                  {status: 'deaths',
+                  value: todayDead
+                  },
+                  ]}
+                />
               </Container>
             </Container>
           )
@@ -167,22 +185,18 @@ function App() {
         countryCasesData.length ? (
           <Container className="d-flex flex-wrap justify-content-between" fluid>
             <h3 className="w-100 ml-4 pl-2 my-3">Cases Evolution since Day 1</h3>
-
-            <PieGraph data={[
-              {status: 'Active',
-               value: countryCasesData.active
-              },
-              {status: 'Confirmed',
-               value: countryCasesData.confirmed
-              },
-              {status: 'Recovered',
-               value: countryCasesData.recovered
-              },
-              {status: 'deaths',
-               value: countryCasesData.deaths
-              },
-              ]}
+            <AreaGraph
+              data={countryCasesData}
+              type="Confirmed"
+              color="#8884d8"
             />
+            <AreaGraph data={countryCasesData} type="Active" color="grey" />
+            <AreaGraph
+              data={countryCasesData}
+              type="Recovered"
+              color="#82ca9d"
+            />
+            <AreaGraph data={countryCasesData} type="Deaths" color="black" />
           </Container>
         ) : <></>
       }
