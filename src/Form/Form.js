@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, FormGroup, Input, Label } from "reactstrap";
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay"
+import { CSSTransition } from 'react-transition-group';
 export default ({
   setCountryCases,
   setCountryData,
@@ -103,7 +104,14 @@ export default ({
 
   return (
     <Form className="mt-3" onSubmit={handleSubmit}>
-      {loading && <LoadingOverlay />}
+      <CSSTransition
+        in={loading}
+        classNames='fade'
+        timeout={250}
+        unmountOnExit
+      >
+        <LoadingOverlay />
+      </CSSTransition>
       <FormGroup>
         <Label className="d-block text-center">View Country Situation</Label>
         <Input

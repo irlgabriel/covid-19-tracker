@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Alert } from "reactstrap";
+import { CSSTransition } from 'react-transition-group';
 
 // Functional comp
 import LoadingOverlay from "./LoadingOverlay/LoadingOverlay"
@@ -60,6 +61,7 @@ function App() {
       }, 3000);
   }, [flash]);
 
+  // Get resources
   useEffect(() => {
     //const today = new Date().toISOString().split("T")[0];
     const yesterday = new Date(Date.now() - 2 * 86400000)
@@ -107,7 +109,14 @@ function App() {
 
   return (
     <Container style={{ minHeight: "100vh" }} className="px-0 bg-light" fluid>
-      {loading && <LoadingOverlay />}
+      <CSSTransition
+        in={loading}
+        classNames='fade'
+        timeout={250}
+        unmountOnExit
+      >
+        <LoadingOverlay />
+      </CSSTransition>
       <Navbar />
       {flash && (
         <Alert color="warning" className="text-center">
@@ -160,7 +169,6 @@ function App() {
                   
                 </Container>
                 <PieGraph 
-                key={'country-pie'}
                 data={[
                   {status: 'Active',
                   value: todayActive
@@ -239,7 +247,6 @@ function App() {
               </Container>
               {/*<BarGraph data={worldData} />*/}
               <PieGraph
-                key={'world-pie'}
                 data={
                   [{
                     status: 'Active',
