@@ -84,8 +84,8 @@ export default ({
             console.log(data[len-1]);
             setTodayDead(data[len - 1].Deaths - data[len -2].Deaths);
             setTodayRecovered(data[len - 1].Recovered - data[len -2].Recovered);
-            setTodayConfirmed(data[len - 1].Confirmed - data[len -2].Confirmed)
-            setTodayActive(data[len - 1].Active - data[len - 2].Active)
+            setTodayConfirmed(data[len - 1].Confirmed - data[len -2].Confirmed);
+            setTodayActive(Math.abs(data[len - 1].Active - data[len - 2].Active));
           })
           .catch((err) => console.log(err))
       }),

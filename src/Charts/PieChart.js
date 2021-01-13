@@ -15,7 +15,7 @@ export const PieGraph = ({key, data}) => {
     'black'
   ]
   return (
-    <PieChart key={key} height={250} width={600}>
+    <PieChart key={key} height={250} width={400}>
       <Pie
         key={key}
         data={data}

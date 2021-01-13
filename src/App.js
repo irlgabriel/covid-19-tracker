@@ -61,8 +61,8 @@ function App() {
   }, [flash]);
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    const yesterday = new Date(Date.now() - 86400000)
+    //const today = new Date().toISOString().split("T")[0];
+    const yesterday = new Date(Date.now() - 2 * 86400000)
       .toISOString()
       .split("T")[0];
 
