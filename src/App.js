@@ -13,7 +13,7 @@ import { PieGraph } from "./Charts/PieChart";
 
 function App() {
   // Loading state?
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   // From Day One -> World data - loaded on page load
   const [worldData, setWorldData] = useState({});
@@ -246,28 +246,33 @@ function App() {
                 </p>
               </Container>
               {/*<BarGraph data={worldData} />*/}
-              <PieGraph
-                data={
-                  [{
-                    status: 'Active',
-                    value: worldData.active
-                  }, 
-                  {
-                    status: 'Confirmed',
-                    value: worldData.confirmed
-                  },
-                  {
-                    status: 'Recovered',
-                    value: worldData.recovered
-                  },
-                  {
-                    status: 'Deaths',
-                    value: worldData.deaths
-                  }
-                ]
-                } 
-              />
-              
+              <CSSTransition
+                in={!loading}
+                classNames='fade'
+                timeout={250}
+              >
+                <PieGraph
+                  data={
+                    [{
+                      status: 'Active',
+                      value: worldData.active
+                    }, 
+                    {
+                      status: 'Confirmed',
+                      value: worldData.confirmed
+                    },
+                    {
+                      status: 'Recovered',
+                      value: worldData.recovered
+                    },
+                    {
+                      status: 'Deaths',
+                      value: worldData.deaths
+                    }
+                  ]
+                  } 
+                />
+              </CSSTransition>              
             </Container>
           </Container>
         ) : <></>
